@@ -18,6 +18,8 @@ jobs:
       - name: Fetch latest release from klog
         id: get_release
         run: |
+          set +e
+
           API_URL="https://api.github.com/repos/tobifroe/klog/releases/latest"
           RELEASE_JSON=$(curl -s $API_URL)
           TAG_NAME=$(echo "$RELEASE_JSON" | jq -r .tag_name)
