@@ -31,7 +31,7 @@ jobs:
 
           grep -e $TAG_NAME klog.rb
 
-          if [ $? = 1 ]; then
+          if [ $? = 0 ]; then
             echo "Formula already up-to-date, skipping update."
             echo "skip=true" >> $GITHUB_OUTPUT
           fi
