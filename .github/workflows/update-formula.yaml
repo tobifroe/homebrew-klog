@@ -1,0 +1,39 @@
+name: Auto-update Homebrew Formula
+
+on:
+  schedule:
+    - cron: "0 * * * *" # every hour
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout formula repo
+        uses: actions/checkout@v4
+
+      - name: Fetch latest release from klog
+        id: get_release
+        run: |
+          API_URL="https://api.github.com/repos/tobifroe/klog/releases/latest"
+          RELEASE_JSON=$(curl -s $API_URL)
+          TAG_NAME=$(echo "$RELEASE_JSON" | jq -r .tag_name)
+          ASSET_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith("darwin.tar.gz")) | .browser_download_url')
+
+          echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "url=$ASSET_URL" >> $GITHUB_OUTPUT
+
+      - name: Download release tarball
+        run: |
+          curl -L "${{ steps.get_release.outputs.url }}" -o klog.tar.gz
+          shasum -a 256 klog.tar.gz | awk '{ print $1 }' > klog.sha256
+
+      - name: Update formula
+        run: |
+          SHA=$(cat klog.sha256)
+          sed -i "s|url \".*\"|url \"${{ steps.get_release.outputs.url }}\"|" klog.rb
+          sed -i "s|sha256 \".*\"|sha256 \"${SHA}\"|" klog.rb
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "Update to ${{ steps.get_release.outputs.tag }}"
+          git push
