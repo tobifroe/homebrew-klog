@@ -21,7 +21,7 @@ jobs:
           API_URL="https://api.github.com/repos/tobifroe/klog/releases/latest"
           RELEASE_JSON=$(curl -s $API_URL)
           TAG_NAME=$(echo "$RELEASE_JSON" | jq -r .tag_name)
-          ASSET_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith("macos.tar.gz")) | .browser_download_url')
+          ASSET_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith("darwin.tar.gz")) | .browser_download_url')
 
           echo "Latest tag: $TAG_NAME"
           echo "Asset URL: $ASSET_URL"
