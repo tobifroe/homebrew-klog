@@ -1,5 +1,8 @@
 name: Auto-update Homebrew Formula
 
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: "0 * * * *" # every hour
