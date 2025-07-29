@@ -5,7 +5,7 @@ permissions:
 
 on:
   schedule:
-    - cron: "0 * * * *" # every hour
+    - cron: "0 4 * * *"
   workflow_dispatch:
 
 jobs:
@@ -29,10 +29,9 @@ jobs:
           echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
           echo "url=$ASSET_URL" >> $GITHUB_OUTPUT
 
-          CURRENT_VERSION=$(grep -oE 'download/v[0-9]+\.[0-9]+\.[0-9]+' klog.rb | sed 's|download/||')
-          echo "Current version in formula: $CURRENT_VERSION"
+          grep -e $TAG_NAME klog.rb
 
-          if [ "$TAG_NAME" = "$CURRENT_VERSION" ]; then
+          if [ $? = 1 ]; then
             echo "Formula already up-to-date, skipping update."
             echo "skip=true" >> $GITHUB_OUTPUT
           fi
