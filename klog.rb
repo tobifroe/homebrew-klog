@@ -1,8 +1,8 @@
 class Klog < Formula
   desc "Tail logs from multiple Kubernetes pods at once"
   homepage "https://github.com/tobifroe/klog"
-  url "https://github.com/tobifroe/klog/releases/download/0.5.1/klog-x86_64-apple-darwin.tar.gz"
-  sha256 "6a5a55adc9b52abe7afb7c6b86da38f8c22ecd31754b658b0b5032d60b160696"
+  url "https://github.com/tobifroe/klog/releases/download/0.6.0/klog-x86_64-apple-darwin.tar.gz"
+  sha256 "c1beee78a764b50568a35a958037874d994de5341cd440f3dc4a1ffb2eebfb45"
   license "MIT"
 
   def install
